@@ -29,9 +29,12 @@ impl Brainfuck {
 
         let mut ret_stack:Vec<usize> = vec![];
         
+        let mut skip:u32 = 0;
+
         while current_command < commands.len() {
             let command = commands[current_command];
             let mut move_cc = true;
+            if skip == 0 {
             match command {
                 // Add 1 to pointed memory cell
                 '+' => self.memory[self.pointer] = if self.memory[self.pointer] == 255 {
@@ -71,6 +74,10 @@ impl Brainfuck {
                 '[' => {
                     // Push beginning to return stack
                     ret_stack.push(current_command);
+                    // Begin skipping if current == 0
+                    if self.memory[self.pointer] == 0 {
+                        skip = 1;
+                    }
                 }
                 // End of loop
                 ']' => {
@@ -79,6 +86,13 @@ impl Brainfuck {
                     move_cc = false;
                 }
                 _ => ()
+            }
+            } else {
+                match command {
+                    '[' => skip += 1,
+                    ']' => skip -= 1,
+                    _ => ()
+                }
             }
             // Increment current command
             if move_cc {
