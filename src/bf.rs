@@ -31,6 +31,16 @@ impl Brainfuck {
                     } else {
                         self.memory[self.pointer] - 1
                     },
+                '>' => self.pointer = if self.pointer == 29999 {
+                        0
+                    } else {
+                        self.pointer + 1
+                    },
+                '<' => self.pointer = if self.pointer == 0 {
+                        29999
+                    } else {
+                        self.pointer - 1
+                    },
                 _ => ()
             }
         }
