@@ -22,7 +22,16 @@ impl Brainfuck {
 
     /// Calls given Brainfuck code
     pub fn call(&mut self, code:&str) {
-        for command in code.chars() {
+        // Transform string to array of letters (commands)
+        let commands:Vec<char> = code.chars().collect();
+
+        let mut current_command:usize = 0;
+
+        let mut ret_stack:Vec<usize> = vec![];
+        
+        while current_command < commands.len() {
+            let command = commands[current_command];
+            let mut move_cc = true;
             match command {
                 // Add 1 to pointed memory cell
                 '+' => self.memory[self.pointer] = if self.memory[self.pointer] == 255 {
@@ -57,8 +66,23 @@ impl Brainfuck {
                         panic!("Input error")
                     }
                     self.memory[self.pointer] = buf[0];
+                },
+                // Beginning of loop
+                '[' => {
+                    // Push beginning to return stack
+                    ret_stack.push(current_command);
+                }
+                // End of loop
+                ']' => {
+                    // Go to beginning of loop
+                    current_command = ret_stack.pop().unwrap();
+                    move_cc = false;
                 }
                 _ => ()
+            }
+            // Increment current command
+            if move_cc {
+                current_command += 1;
             }
         }
     }
