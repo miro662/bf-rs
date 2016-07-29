@@ -20,7 +20,19 @@ impl Brainfuck {
     /// Calls given Brainfuck code
     pub fn call(&mut self, code:&str) {
         for command in code.chars() {
-            println!("{}", command)
+            match command {
+                '+' => self.memory[self.pointer] = if self.memory[self.pointer] == 255 {
+                        0
+                    } else {
+                        self.memory[self.pointer] + 1
+                    },
+                '-' => self.memory[self.pointer] = if self.memory[self.pointer] == 0 {
+                        255
+                    } else {
+                        self.memory[self.pointer] - 1
+                    },
+                _ => ()
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ fn main() {
     let mut brainfuck = Brainfuck::new();
 
     // Call simple code
-    brainfuck.call("++");
+    brainfuck.call("++---");
 
     // Write result
     println!("{}", brainfuck.memory[0]);
